@@ -1,0 +1,5 @@
+Write deployment file for app - done 
+Add deployment to helm chart 
+Setup jenkins using 1 click
+Write pipeline and healthcheck
+Monitoring and Alerting
