@@ -116,7 +116,7 @@ spec:
         app: fastapi-1
     spec:
       containers:
-      - image: gcr.io/erudite-store-319509/veeren-fastapi-1@sha256:82649d02a06d5e3198fc0a1ee56f9e1ea1c62337e63059bc064c8dc3983ce51c
+      - image: veeren03/fastapi03:latest
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
@@ -182,7 +182,7 @@ metadata:
             'f:name': {}
       manager: GoogleCloudConsole
       operation: Update
-      time: '2021-08-02T16:39:55Z'
+      
     - apiVersion: autoscaling/v1
       fieldsType: FieldsV1
       fieldsV1:
@@ -198,11 +198,11 @@ metadata:
           'f:lastScaleTime': {}
       manager: vpa-recommender
       operation: Update
-      time: '2021-08-02T16:45:17Z'
-  name: veeren-fastapi-1-hpa-9obq
+      
+  name: veeren-fastapi-1-hpa
   namespace: default
 spec:
-  maxReplicas: 50
+  maxReplicas: 10
   metrics:
     - resource:
         name: cpu
@@ -279,13 +279,13 @@ status:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-demo
+  name: fastapi-1-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 30Gi
+      storage: 5Gi
 
 
 ---

@@ -1,4 +1,4 @@
-Write deployment file for app - done 
+Write deployment file for k8s - done  (deployment, service, ingress, replica set, ingress controller, )
 Add deployment to helm chart 
 Setup jenkins using 1 click
 Write pipeline and healthcheck
