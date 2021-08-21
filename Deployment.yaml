@@ -52,10 +52,6 @@ status:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  
-    
-  
-  
   labels:
     app: fastapi-1
   managedFields:
@@ -115,9 +111,13 @@ spec:
       labels:
         app: fastapi-1
     spec:
+    
+    
+    
       containers:
       - image: veeren03/fastapi03:latest
         imagePullPolicy: IfNotPresent
+        
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -274,22 +274,33 @@ status:
 
 
 ---
-#PersistentVolume Config for pd-standard with reclaim policy set to Retain.
-# pvc-demo.yaml
+#PVC
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: fastapi-1-pvc
 spec:
+  storageClassName: fastapi-1-standard-pv
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 5Gi
 
 
 ---
-
-
+#Storage class for PV standard
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fastapi-1-standard-pv
+provisioner: kubernetes.io/gce-pd
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  type: pd-standard
+  fstype: ext4
+  replication-type: none
 
 
