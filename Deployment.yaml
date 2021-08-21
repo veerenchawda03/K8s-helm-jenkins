@@ -1,3 +1,5 @@
+#Service config
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -32,7 +34,6 @@ metadata:
         f:type: {}
     manager: GoogleCloudConsole
     operation: Update
-    time: "2021-08-20T13:59:13Z"
   - apiVersion: v1
     fieldsType: FieldsV1
     fieldsV1:
@@ -45,11 +46,8 @@ metadata:
           f:ingress: {}
     manager: kube-controller-manager
     operation: Update
-    time: "2021-08-20T14:00:01Z"
   name: fastapi-1-service
   namespace: default
-  resourceVersion: "3156"
-  uid: 9684c2b6-345a-4872-83d4-26b26b433d7d
 spec:
   clusterIP: 10.8.12.63
   clusterIPs:
@@ -71,6 +69,7 @@ status:
 
 
 ---
+#Deployment config
 
 apiVersion: apps/v1
 kind: Deployment
@@ -171,7 +170,7 @@ spec:
   strategy:
     rollingUpdate:
       maxSurge: 25%
-      maxUnavailable: 25%
+      maxUnavailable: 0
     type: RollingUpdate
   template:
     metadata:
@@ -182,6 +181,29 @@ spec:
       containers:
       - image: gcr.io/erudite-store-319509/veeren-fastapi-1@sha256:82649d02a06d5e3198fc0a1ee56f9e1ea1c62337e63059bc064c8dc3983ce51c
         imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+
+          
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+
         name: veeren-fastapi-1-sha256-1
         resources: {}
         terminationMessagePath: /dev/termination-log
@@ -259,7 +281,7 @@ spec:
   metrics:
     - resource:
         name: cpu
-        targetAverageUtilization: 80
+        targetAverageUtilization: 50
       type: Resource
   minReplicas: 1
   scaleTargetRef:
@@ -269,13 +291,65 @@ spec:
 
 
 ---
----
-apiVersion: "extensions/v1beta1"
-kind: "Ingress"
+#Ingress config
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
-  name: "fast-api-1-ingress"
-  namespace: "default"
+  annotations:
+    ingress.kubernetes.io/backends: '{"k8s1-66859e3e-default-fastapi-1-service-80-531774c7":"HEALTHY"}'
+    ingress.kubernetes.io/forwarding-rule: k8s2-fr-1fvu0n1y-default-fast-api-1-ingress-8sxmjv7k
+    ingress.kubernetes.io/target-proxy: k8s2-tp-1fvu0n1y-default-fast-api-1-ingress-8sxmjv7k
+    ingress.kubernetes.io/url-map: k8s2-um-1fvu0n1y-default-fast-api-1-ingress-8sxmjv7k
+  creationTimestamp: "2021-08-20T20:58:12Z"
+  finalizers:
+  - networking.gke.io/ingress-finalizer-V2
+  generation: 1
+  managedFields:
+  - apiVersion: extensions/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:backend:
+          .: {}
+          f:serviceName: {}
+          f:servicePort: {}
+    manager: GoogleCloudConsole
+    operation: Update
+    time: "2021-08-20T20:58:12Z"
+  - apiVersion: networking.k8s.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:ingress.kubernetes.io/backends: {}
+          f:ingress.kubernetes.io/forwarding-rule: {}
+          f:ingress.kubernetes.io/target-proxy: {}
+          f:ingress.kubernetes.io/url-map: {}
+        f:finalizers:
+          .: {}
+          v:"networking.gke.io/ingress-finalizer-V2": {}
+      f:status:
+        f:loadBalancer:
+          f:ingress: {}
+    manager: glbc
+    operation: Update
+    time: "2021-08-20T20:58:58Z"
+  name: fast-api-1-ingress
+  namespace: default
+  resourceVersion: "136265"
+  uid: e3f7a88c-5f86-4fba-9922-bc0e39823233
 spec:
   backend:
-    serviceName: "fastapi-1-service"
+    serviceName: fastapi-1-service
     servicePort: 80
+status:
+  loadBalancer:
+    ingress:
+    - ip: 34.107.251.63
+
+
+---
+#PersistentVolume Config
+
+
