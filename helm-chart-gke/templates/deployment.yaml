@@ -1,17 +1,16 @@
-# #this is not duplicate key
-apiVersion2: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm-example.fullname" . }}
+  name: {{ include "helm-chart-gke.fullname" . }}
   labels:
-    {{-include "helm-example.labels" . | nindent 4 }}
+    {{-include "helm-chart-gke.labels" . | nindent 4 }}
 spec:
   {{-if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{-end }}
   selector:
     matchLabels:
-      {{-include "helm-example.selectorLabels" . | nindent 6 }}
+      {{-include "helm-chart-gke.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{-with .Values.podAnnotations }}
@@ -19,13 +18,13 @@ spec:
         {{-toYaml . | nindent 8 }}
       {{-end }}
       labels:
-        {{-include "helm-example.selectorLabels" . | nindent 8 }}
+        {{-include "helm-chart-gke.selectorLabels" . | nindent 8 }}
     spec:
       {{-with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{-toYaml . | nindent 8 }}
-      {{-end }}
-      serviceAccountName: {{ include "helm-example.serviceAccountName" . }}
+      {{- end }}
+      serviceAccountName: {{ include "helm-chart-gke.serviceAccountName" . }}
       securityContext:
         {{-toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -36,7 +35,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8080 #update the port here to 8080
+              containerPort: 8000
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -60,4 +59,3 @@ spec:
       tolerations:
         {{-toYaml . | nindent 8 }}
       {{-end }}
- 
