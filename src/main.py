@@ -21,7 +21,7 @@ app.add_api_route("/health", health([is_app_online]))
 async def get_call():
 
 
-    return {"message": "This is a GET call, QA check 3.8.2021"}
+    return {"message": "This is a GET call, checking jenkins"}
 
 
 
