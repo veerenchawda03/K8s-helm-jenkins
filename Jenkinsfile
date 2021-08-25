@@ -32,10 +32,17 @@ pipeline {
       }
     }
 
-    stage('Deploy stage') {
+    stage('Deploy staging') {
       agent any
       steps {
         kubernetesEngineDeploy(cluster: 'cluster-1	', clusterName: 'cluster-1	', credentialsId: '220f2d7e-4165-4885-aae4-d651d0e547d2', location: 'us-central1-c	', manifestPattern: '/Deployment.yaml', projectId: 'erudite-store-319509', verifyTimeoutInMinutes: 5, zone: 'c')
+      }
+    }
+
+    stage('Deploy prod') {
+      agent any
+      steps {
+        kubernetesEngineDeploy(cluster: 'cluster-2', clusterName: 'cluster-2', credentialsId: '220f2d7e-4165-4885-aae4-d651d0e547d2', location: 'us-central1-c	', manifestPattern: '/Deployment.yaml', projectId: 'erudite-store-319509', verifyTimeoutInMinutes: 5, zone: 'c')
       }
     }
 
