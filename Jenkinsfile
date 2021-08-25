@@ -12,7 +12,7 @@ pipeline {
       agent {
         docker {
           image 'docker'
-          label 'latest'
+          
         }
 
       }
@@ -25,7 +25,7 @@ pipeline {
       agent {
         docker {
           image 'docker'
-          label 'latest'
+          
         }
 
       }
