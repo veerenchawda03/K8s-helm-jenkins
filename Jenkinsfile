@@ -11,7 +11,8 @@ pipeline {
     stage('Docker build') {
       agent {
         docker {
-          image 'docker:20.10-dind'
+          image 'docker'
+          label 'latest'
         }
 
       }
@@ -23,7 +24,8 @@ pipeline {
     stage('Docker push') {
       agent {
         docker {
-          image 'docker:20.10-dind'
+          image 'docker'
+          label 'latest'
         }
 
       }
