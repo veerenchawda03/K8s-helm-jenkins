@@ -11,7 +11,7 @@ pipeline {
     stage('Docker build') {
       agent {
         docker {
-          image 'python:3.9-slim'
+          image 'docker:20.10-dind'
         }
 
       }
@@ -23,7 +23,7 @@ pipeline {
     stage('Docker push') {
       agent {
         docker {
-          image 'python:3.9-slim'
+          image 'docker:20.10-dind'
         }
 
       }
